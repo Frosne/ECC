@@ -16,6 +16,7 @@ public:
     void static Print(bool isWarning, std::string info);
     void static PrintCurve(Curve c1);
     void static PrintPoint(Point p1);
+    void static Print(std::string info);
 };
 
 #endif // PRINTER_H

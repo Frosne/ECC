@@ -3,11 +3,16 @@
 #include <givaro/givinteger.h>
 #include <givaro/modular.h>
 
+#include "printer.h"
+
 typedef Modular<Integer> Field;
 typedef Poly1Dom< Field, Dense> Polys;
 
-
+static int timer = 0;
 using namespace Givaro;
+
+
+
 mathS::mathS()
 {
 
@@ -24,38 +29,44 @@ Integer mathS::Abs(Integer a, Integer b)
 
 Integer mathS::Pow(Integer base, Integer pow)
 {
-    if (pow == Integer::zero)
+     if (pow == Integer::zero)
         return Integer::one;
     Integer temp = base;
     for (int i = 1; i<pow; i++)
-        temp*=temp;
-
+        temp*=base;
+    return temp;
 }
 
 Integer mathS::PollandRho(Integer number)
 {
-    int const length = 1000;
+    int const length = 32000;
     Integer arr [length];
     arr[0]=1;
-    for (int i = 0; i<length; i++)
+    for (int i = 1; i<4; i++)
     {
         arr[i]=mathS::ComputePolynomial(arr[i-1],number);
     }
 
-    Integer GCD = -1;
-    for (int i = 1; i<length; i++)
-    {
-        for (int j = Pow(2,i)+1; j<Pow(2,i+1)-1; j++)
-        {
 
-           GCD = CheckGCDPho(Abs(arr[i],arr[j]),number);
+
+
+    Integer GCD = -1;
+    for (Integer i = 1; i<length; i++)
+    {
+
+        for (Integer j = Pow(2,i); j<Pow(2,i+1); j++)
+        {
+            GCD = CheckGCDPho(Abs(arr[i],arr[j]),number);
+
            if (GCD != Integer::mOne)
            {
-               break;
+              std::cout<<arr[i]<< "    " << arr[j]<<std::endl;
+              return GCD;
            }
 
         }
     }
+
 
     return GCD;
 }
@@ -83,7 +94,6 @@ Integer mathS::PollandRhoPrime(Integer _number)
 
     }
 
-
 }
 //TODO: DELETE!
 Integer mathS::ComputePolynomial(Integer Point, Integer mod)
@@ -102,10 +112,11 @@ Integer mathS::ComputePolynomial(Integer Point, Integer mod)
 
 Integer mathS::CheckGCDPho(Integer a, Integer b)
 {
+    if (a==Integer::zero)
+        return Integer::mOne;
     IntegerDom domain;
     IntegerDom::Element GG;
     domain.gcd(GG,a,b);
-    std::cout<<"Result:"<<GG<<std::endl;
 
   if (GG==Integer::one)
   {
@@ -113,3 +124,18 @@ Integer mathS::CheckGCDPho(Integer a, Integer b)
   }
   return GG;
 }
+
+/*struct PhoPoint mathS::GenerateBasePoint(Point base, Point q, Curve c)
+{
+    Integer a0 = Integer::random_between(1,10);
+    Integer b0 = Integer::random_between(1,10);
+
+
+    Point a =  c.ComputeMultiplicationByMSB(base,a0);
+    Point b =  c.ComputeMultiplicationByMSB(q,b0);
+
+    Point _q = c.PointAddiction(a,b);
+
+
+}
+*/

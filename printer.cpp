@@ -31,6 +31,9 @@ void  printer::PrintPoint(Point p1)
     std::cout<<"Point info: "<< "X:" << p1.x1 << " Y:"<< p1.y1<<std::endl;
 }
 
-
+void printer::Print(std::string info)
+{
+    printer::Print(0,info);
+}
 
 

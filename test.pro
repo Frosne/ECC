@@ -8,7 +8,9 @@ SOURCES += main.cpp \
     curve.cpp \
     printer.cpp \
     searchoutput.cpp \
-    maths.cpp
+    maths.cpp \
+    phopoint.cpp \
+    patternmaker.cpp
 
 QMAKE_CXXFLAGS += -std=c++11
 
@@ -29,4 +31,6 @@ HEADERS += \
     curve.h \
     printer.h \
     searchoutput.h \
-    maths.h
+    maths.h \
+    phopoint.h \
+    patternmaker.h

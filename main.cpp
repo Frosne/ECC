@@ -7,6 +7,7 @@
 #include <printer.h>
 #include <searchoutput.h>
 #include "maths.h"
+#include "patternmaker.h"
 
 using namespace Givaro;
 
@@ -152,10 +153,19 @@ int main(int argc, char * * argv) {
 
     */
 
-  //mathS::PollandRhoPrime(2);
+ // mathS::PollandRhoPrime(12352531);
 
-  Integer test = 96511250482432409;
- std::cout<<mathS::PollandRho(test)<<std::endl;
+  /*  Integer int_ = 1000006000009;
+  std::cout<<"Result: "<<mathS::PollandRho(int_)<<std::endl;
+*/
+
+
+    std::string test = "   every second; Y = Y + Y; Y = Y + P  ;  ";
+    patternMaker pm (test);
+    pm.parse(curve,p,p,p);
+
+
+
 
 return 0;
 }
