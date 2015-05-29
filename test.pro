@@ -10,7 +10,8 @@ SOURCES += main.cpp \
     searchoutput.cpp \
     maths.cpp \
     phopoint.cpp \
-    patternmaker.cpp
+    patternmaker.cpp \
+    jacobiquarticpoint.cpp
 
 QMAKE_CXXFLAGS += -std=c++11
 
@@ -33,4 +34,5 @@ HEADERS += \
     searchoutput.h \
     maths.h \
     phopoint.h \
-    patternmaker.h
+    patternmaker.h \
+    jacobiquarticpoint.h

@@ -6,16 +6,20 @@
 #include <curve.h>
 #include <point.h>
 
-class patternMaker
+#include <givaro/givinteger.h>
+
+class PatternMaker
 {
 public:
     std::list<int> types;
     int length;
     std::string pattern;
-    patternMaker();
-    patternMaker(std::string pattern);
+    PatternMaker();
+    PatternMaker(std::string pattern);
     static std::string Resign(std::string text);
     void parse(Curve c, Point y, Point p, Point q);
+    std::string ReturnPattern();
+    std::string static ToString(int number);
 };
 
 #endif // PATTERNMAKER_H

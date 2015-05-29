@@ -1,5 +1,4 @@
 
-
 #include <iostream>
 #include <givaro/givinteger.h>
 #include <givaro/extension.h>
@@ -13,28 +12,39 @@
 
 using namespace Givaro;
 
-//Default constructor
-Curve::Curve()
+void Curve::Initialization(Integer field, Integer a1, Integer a2, Integer a3, Integer a4, Integer a6)
 {
-    //this->Curve(1,0,0,0,0,0);
-}
-
-Curve::Curve(Integer field, Integer a1, Integer a2, Integer a3, Integer a4, Integer a6)
-{
-
+    //Building the field
     Field _temp (field);
-
     this->CurveField = _temp;
 
-    Field::Element elem;
-    CurveField.init(elem,2);
-
+    // Initialization of the variable
     this->CurveField.init(this->a1,a1);
     this->CurveField.init(this->a2,a2);
     this->CurveField.init(this->a3,a3);
     this->CurveField.init(this->a4,a4);
     this->CurveField.init(this->a6,a6);
+}
 
+Curve::Curve()
+{
+
+}
+
+Curve::Curve(Integer field)
+{
+    Initialization(field,0,0,0,0,0);
+}
+
+
+Curve::Curve(Integer field, Integer a, Integer b)
+{
+    Initialization(field,0,0,0,a,b);
+}
+
+Curve::Curve(Integer field, Integer a1, Integer a2, Integer a3, Integer a4, Integer a6)
+{
+   Initialization(field,a1,a2,a3,a4,a6);
 }
 
 void Curve::ComputeParameters()
@@ -243,6 +253,7 @@ Point Curve::PointAddiction(Point p1, Point p2)
 
 
     Point pt;
+    pt.PointField = p1.PointField;
     pt.x1 = x;
     pt.y1 = y;
 

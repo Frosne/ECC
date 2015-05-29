@@ -4,15 +4,18 @@
 #include "curve.h"
 #include <iostream>
 #include <printer.h>
+#include <list>
 
 
-patternMaker::patternMaker()
+using namespace std;
+
+PatternMaker::PatternMaker()
 {
 
 
 }
 
-patternMaker:: patternMaker(std::string pattern)
+PatternMaker:: PatternMaker(std::string pattern)
 {
     this->pattern = pattern;
 }
@@ -47,19 +50,29 @@ return -1;
 int getOperation(std::string task)
 {
     std::cout<<task<<std::endl;
-   /* std::string pattPart = "Y = Y + ";
+    std::string pattPart = "Y = Y + ";
     size_t t = task.find(pattPart)+pattPart.length();
     if (t>=0)
     {
-        std::string symbol = patternMaker::Resign(task.substr(t));
-        std::cout<<symbol<<std::endl;
+        std::string symbol = PatternMaker::Resign(task.substr(t));
+
+        if (symbol == "P")
+        {
+            return 1;
+        }
+        else if (symbol == "Q")
+            return 2;
+        else if (symbol == "Y")
+            return 3;
+
+
     }
     else
     {
        printer::Print(1,"Pattern is not recognizable");
        return -1;
     }
-    */
+
     return -1;
 }
 
@@ -79,18 +92,19 @@ std::string ResignR(std::string text)
         return text;
 }
 
-std::string patternMaker::Resign(std::string text)
+std::string PatternMaker::Resign(std::string text)
 {
    std::string _text =  ResignL(text);
    return ResignR(_text);
 
 }
 
-void patternMaker::parse(Curve c, Point y, Point p, Point q)
+void PatternMaker::parse(Curve c, Point y, Point p, Point q)
 {
   int type=0;
   int length = 0;
   length = searchPattern(this->pattern, type);
+  this->length = length;
 
   size_t t = -1;
   t =  this->pattern.find(";")+sizeof(char)*1;
@@ -99,8 +113,47 @@ void patternMaker::parse(Curve c, Point y, Point p, Point q)
   {
       size_t second = -1;
       second =  this->pattern.find(";",t);
-      int _type = getOperation(patternMaker::Resign(this->pattern.substr(t,second-t)));
-      types.push_back(_type);
+      int _type = getOperation(PatternMaker::Resign(this->pattern.substr(t,second-t)));
+      types.push_front(_type);
       t = second+1;
   }
+}
+
+std::string PatternMaker::ToString(int number)
+{
+
+    std::string result =  std::to_string(number);
+    return result;
+}
+
+int getListElement(list<int> lst, int element)
+{
+    list<int> temp = lst;
+    int it = 0;
+
+    list<int>::iterator i;
+    if (lst.size() <element)
+        return -1;
+    for(i=temp.begin(); i != temp.end(); i++)
+    {
+        if (it==element)
+        {
+            return *i;
+        }
+
+    }
+
+    return -1;
+}
+
+std::string PatternMaker::ReturnPattern()
+{
+
+    std::string result = std::to_string(this->length);
+    for (int i = 0; i<this->length-1; i++)
+    {
+        result = result+ "  " + std::to_string(getListElement(this->types,i));
+    }
+
+    return result;
 }

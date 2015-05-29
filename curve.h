@@ -17,23 +17,18 @@ class Curve
 {
 
 public:
-          Field CurveField;
-         // Polys CurvePoly;
+        Field CurveField;
+        Field::Element a1,a2,a3,a4,a6;
 
-          Field::Element a1,a2,a3,a4,a6;
-
-
-        //main part of the curve
-        int characteristic;
-        int order;
+        Integer order;
         Integer diskriminant;
-
-        //additional information
         Field::Element d2, d4, d6, d8;
 
-        //1,0..0
-         Curve();
-         Curve(Integer field, Integer a1, Integer a2, Integer a3, Integer a4, Integer a6);
+        //constructors
+        Curve();
+        Curve(Integer field);
+        Curve(Integer field, Integer a, Integer b);
+        Curve(Integer field, Integer a1, Integer a2, Integer a3, Integer a4, Integer a6);
 
 
          bool IsPointOnCurve(Point p);
@@ -50,6 +45,8 @@ public:
          Integer DLPNaive(Point real, Point Base, Integer order);
 
 
+         private:
+         void Initialization(Integer field, Integer a1, Integer a2, Integer a3, Integer a4, Integer a6);
 };
 #endif // CURVE_H
 

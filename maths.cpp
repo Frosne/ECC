@@ -4,6 +4,9 @@
 #include <givaro/modular.h>
 
 #include "printer.h"
+#include "phopoint.h"
+
+#include <list>
 
 typedef Modular<Integer> Field;
 typedef Poly1Dom< Field, Dense> Polys;
@@ -125,10 +128,11 @@ Integer mathS::CheckGCDPho(Integer a, Integer b)
   return GG;
 }
 
-/*struct PhoPoint mathS::GenerateBasePoint(Point base, Point q, Curve c)
+PhoPoint mathS::GenerateBasePoint(Point base, Point q, Curve c)
 {
-    Integer a0 = Integer::random_between(1,10);
-    Integer b0 = Integer::random_between(1,10);
+    Integer a0 = Integer::random_between(1,10)%10;
+    std::cout<<"a0:"<<a0<<std::endl;
+    Integer b0 = Integer::random_between(1,10)%10;
 
 
     Point a =  c.ComputeMultiplicationByMSB(base,a0);
@@ -136,6 +140,130 @@ Integer mathS::CheckGCDPho(Integer a, Integer b)
 
     Point _q = c.PointAddiction(a,b);
 
+    PhoPoint point;
+    point.a = base.PointField.init(point.a,a0);
+    point.b = base.PointField.init(point.b,b0);
+    point.p = _q;
+
+    printer::Print(1,"BasePoint:");
+    printer::PrintRhoPoint(point);
+    return point;
 
 }
-*/
+
+PhoPoint mathS::GenerateNewPoint(int counter,int period,PhoPoint Y, Point p, Point q, Curve c)
+{
+    PhoPoint result;
+    if (counter%period==0)
+    {
+        result.p = c.PointAddiction(Y.p,p);
+
+        Y.p.PointField.assign(result.b,Integer::zero);
+        Y.p.PointField.assign(result.a,Integer::zero);
+
+        Y.p.PointField.add(result.a,Y.a,1);
+        Y.p.PointField.assign(result.b,Y.b);
+       // result.a = Y.a + 1;
+        //result.b = Y.b;
+    }
+    else if (counter%period ==1)
+    {
+        result.p = c.PointAddiction(Y.p,q);
+        Y.p.PointField.assign(result.b,Integer::zero);
+        Y.p.PointField.assign(result.a,Integer::zero);
+        Y.p.PointField.add(result.b,Y.b,1);
+        Y.p.PointField.assign(result.a,Y.a);
+    }
+    else if (counter%period==2)
+    {
+        Integer two (2);
+        result.p = c.PointAddiction(Y.p,Y.p);
+
+        Y.p.PointField.assign(result.b,Integer::zero);
+        Y.p.PointField.assign(result.a,Integer::zero);
+
+        Y.p.PointField.mul(result.a,Y.a,two);
+        Y.p.PointField.mul(result.b,Y.b,2);
+
+       /* result.a = Y.a *2;
+        result.b = Y.b *2;*/
+    }
+    return result;
+
+}
+
+//PhoPoint mathS::GenerateNewPoint(int counter, Point base, Point q, Curve c, PatternMaker pm);
+
+void mathS::GenerateArray(int elements, Point base, Point q, Curve c, PhoPoint array[])
+{
+
+   PhoPoint y0= this->GenerateBasePoint(base,q,c);
+   array[0] = y0;
+
+   for (int i = 1; i<elements; i++)
+   {
+       array[i]=this->GenerateNewPoint(i,3,array[i-1],base,q,c);
+   }
+
+   return;
+}
+
+void mathS::CompareArray(PhoPoint array[],int elements, PhoPoint a, PhoPoint b)
+{
+    for (int i = 0; i<elements-1; i++)
+    {
+        for (int j = i; j<elements-1; j++)
+        {
+            if (PhoPoint::isEquals(array[i],array[j]) && (i!=j))
+            {
+                a = array[i];
+                b = array[j];
+                printer::Print("Point detected");
+                printer::PrintRhoPoint(a);
+                printer::PrintRhoPoint(b);
+                printer::Print("Point detected");
+                return;
+            }
+        }
+    }
+
+     printer::Print("Point detected");
+     return;
+}
+
+void mathS::CalculateD(PhoPoint a, PhoPoint b, Integer field, Integer result)
+{
+    IntegerDom dom;
+    Integer _gcd;
+    dom.gcd(_gcd,mathS::Abs(b.b,a.a),field);
+    if (_gcd==1)
+    {
+        Field::Element _temp,_temp2;
+        a.p.PointField.assign(_temp,Integer::zero);
+        a.p.PointField.assign(_temp2,Integer::zero);
+
+        a.p.PointField.sub(_temp,b.b,a.b);
+        a.p.PointField.inv(_temp,_temp);
+
+        a.p.PointField.sub(_temp2,b.a,b.b);
+        a.p.PointField.mul(_temp,_temp,_temp2);
+
+        result = _temp;
+    }
+}
+
+Integer mathS::GenerateNextPrime(Integer last)
+{
+    IntPrimeDom IP;
+    IntPrimeDom::Element m;
+    IP.nextprime(m,last);
+    return m;
+}
+
+void mathS::ComputePrimeNumbers(Integer q, std::list<Integer> res, int size)
+{
+    size+=1;
+    return;
+
+
+}
