@@ -62,7 +62,7 @@ public:
     Integer static GenerateNextPrime(Integer q);
     int ComputeT(Integer q, Curve c);
     Bivariates::Element static CreatePolynomial(Integer power, Curve c);
-    static std::list<Bivariates::Element> RingTest(Curve c, Bivariates::Element el, int power);
+    static std::list<Bivariates::Element> RingTest(Curve c, Bivariates::Element& el, int power);
     Field::Element static ComputeQModL(Integer q, Integer l);
     static std::list<Bivariates::Element> ComputeNotQ(Field::Element el, Curve c);
     void static SchoffsAlgorithm(Integer q, Curve c);

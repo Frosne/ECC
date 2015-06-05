@@ -9,6 +9,7 @@
 #include "maths.h"
 #include "patternmaker.h"
 #include <list>
+#include <vector>
 
 using namespace Givaro;
 
@@ -58,16 +59,20 @@ Integer ChangeD(Integer d, Integer random)
 
 int main(int argc, char * * argv) {
 
-   Curve c ;
-   Curve c1{100};
-   Curve c2{100,2,2};
-   Curve c3{100,1,2,3,4,5};
 
-   printer::PrintCurve(c);
-   printer::PrintCurve(c1);
-   printer::PrintCurve(c2);
-   printer::PrintCurve(c3);
-return 0;
+
+
+    mathS math;
+       std::vector<Integer> v;
+        v = math.ComputePrimeNumbers(Integer(100));
+
+        Curve c(17,0,0,0,2,2);
+     // int res =  math.ComputeT(Integer(17),c);
+
+        mathS::SchoffsAlgorithm(Integer(17),c);
+      // std::cout<< mathS::ComputeQModL(Integer(2321442142206),Integer(5))<<std::endl;
+       //mathS::ComputeNotQ();*/
+
 }
 
 

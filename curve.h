@@ -30,19 +30,30 @@ public:
         Curve(Integer field, Integer a, Integer b);
         Curve(Integer field, Integer a1, Integer a2, Integer a3, Integer a4, Integer a6);
 
+        //compute additional information
+        void ComputeParameters();
+        //todo
+        void ComputeOrder();
+        void ComputeHassInterval();
 
-         bool IsPointOnCurve(Point p);
-         bool IsCurvesEqual(Curve c1);
-         void ComputeParameters();
-         int ComputeOrder();
-         void ComputeHassInterval();
-         Point PointAddiction(Point p1, Point p2);
-         Point ComputeMultiplicationByMSB(Point p, Integer d);
+        //Compare
+        bool IsPointOnCurve(Point p);
+        bool IsCurvesEqual(Curve c1);
 
-         SearchOutput SearchPoint(Point real, Point changed, Point base);
-         Integer RebuildD(int keyLength, Point base, Integer d);
+        //Point operation on curve
+        Point PointAddition(Point p1, Point p2);
+        Point ComputeMultiplicationByMSB(Point p, Integer d);
+        //todo
+        Point ComputeMultiplicationByLSB(Point p, Integer d);
+        //todo
+        Integer ComputePointOrder(Point p);
 
-         Integer DLPNaive(Point real, Point Base, Integer order);
+        //Derivided
+        SearchOutput SearchPoint(Point real, Point changed, Point base);
+        Integer RebuildD(int keyLength, Point base, Integer d);
+
+        //Algorithms
+        Integer DLPNaive(Point real, Point Base, Integer order);
 
 
          private:

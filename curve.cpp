@@ -187,7 +187,7 @@ bool Curve::IsPointOnCurve(Point p)
         return false;
 }
 
-Point Curve::PointAddiction(Point p1, Point p2)
+Point Curve::PointAddition(Point p1, Point p2)
 {
     Field::Element lambda, temp, temp1, temp2, x, y;
     CurveField.init(lambda,0);
@@ -269,9 +269,9 @@ Point Curve::ComputeMultiplicationByMSB(Point p, Integer d)
 
     for (int i = d.bitsize()-2; i>=0; i--)
     {
-          H= this->PointAddiction(H,H);
+          H= this->PointAddition(H,H);
           if (getBit(d,i))
-            H = this->PointAddiction(H,p);
+            H = this->PointAddition(H,p);
     }
     return H;
 }
@@ -288,14 +288,14 @@ SearchOutput Curve::SearchPoint(Point real, Point changed, Point base)
     {
         if (i > 1)
         {
-            _base = this->PointAddiction(_base,_base);
+            _base = this->PointAddition(_base,_base);
         }
 
 
 
-        _temp = this->PointAddiction(real,_base);
+        _temp = this->PointAddition(real,_base);
 
-        __temp = this->PointAddiction(changed,_base);
+        __temp = this->PointAddition(changed,_base);
 
 
         if (Point::isEquals(changed,_temp))
@@ -380,7 +380,7 @@ Integer Curve::DLPNaive(Point real, Point Base, Integer order)
     for (Integer i = 2; i<order; i++)
     {
        printer::PrintPoint(temp);
-       temp =  this->PointAddiction(temp,Base);
+       temp =  this->PointAddition(temp,Base);
 
        if (Point::isEquals(temp,real))
            return i;
